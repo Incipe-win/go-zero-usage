@@ -9,12 +9,12 @@ info (
 )
 
 type searchRequest {
-	OrderID string `path:"orderID"`
+	OrderID uint64 `path:"orderID"`
 }
 
 type searchResponse {
-	OrderID  string `json":"orderID"`
-	Status   string `json:"status"`
+	OrderID  uint64 `json":"orderID"`
+	Status   int    `json:"status"`
 	Username string `json:"username"`
 }
 

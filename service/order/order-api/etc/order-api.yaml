@@ -1,0 +1,12 @@
+Name: order-api
+Host: 0.0.0.0
+Port: 8888
+UserRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: user.rpc
+Mysql:
+  DataSource: "root:root@tcp(127.0.0.1:3306)/sql_test?charset=utf8mb4&parseTime=True&loc=Local"
+CacheRedis:
+  - Host: 127.0.0.1:6379
