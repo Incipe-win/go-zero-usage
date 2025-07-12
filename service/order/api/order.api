@@ -1,0 +1,28 @@
+syntax = "v1"
+
+info (
+	title:   "mall-order"
+	desc:    "go-zero mall order service API"
+	author:  "hchao"
+	email:   "@xiaoheiban.cn"
+	version: "1.0"
+)
+
+type searchRequest {
+	OrderID string `path:"orderID"`
+}
+
+type searchResponse {
+	OrderID  string `json":"orderID"`
+	Status   string `json:"status"`
+	Username string `json:"username"`
+}
+
+@server (
+	prefix: api
+)
+service order-api {
+	@handler SearchHandler
+	get /search/:orderID (searchRequest) returns (searchResponse)
+}
+

@@ -1,0 +1,64 @@
+syntax = "v1"
+
+info (
+	title:   "mall"
+	desc:    "go-zero study"
+	author:  "hchao"
+	email:   "@xiaoheiban.cn"
+	version: "1.0"
+)
+
+// 定义类型
+type SignupRequest {
+	Username   string `json:"username"`
+	Password   string `json:"password"`
+	RePassword string `json:"re_password"`
+	Gender     int64  `json:"gender,options=0|1|2,default=2"`
+}
+
+type SignupResponse {
+	Message string `json:"message"`
+}
+
+@server (
+	prefix: api
+)
+service user-api {
+	@handler SignupHandler
+	post /user/signup (SignupRequest) returns (SignupResponse)
+
+	@handler LoginHandler
+	post /user/login (LoginRequest) returns (LoginResponse)
+}
+
+@server (
+	prefix:     api
+	jwt:        Auth
+	middleware: Cost
+)
+service user-api {
+	@handler DetailHandler
+	get /user/detail/:user_id (DetailRequest) returns (DetailResponse)
+}
+
+type LoginRequest {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+type LoginResponse {
+	Message      string `json:"message"`
+	AccessToken  string `json:"accessToken"`
+	AccessExpire int    `json:"accessExpire"`
+	RefreshAfter int    `json:"refreshAfter"`
+}
+
+type DetailRequest {
+	UserID int64 `path:"user_id"`
+}
+
+type DetailResponse {
+	Username string `json:"username"`
+	Gender   int64  `json:"gender"`
+}
+
