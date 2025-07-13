@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"user/rpc/userclient"
 
+	"order-api/internal/interceptor"
 	"order-api/internal/svc"
 	"order-api/internal/types"
 
@@ -36,6 +37,7 @@ func (l *SearchLogic) Search(req *types.SearchRequest) (resp *types.SearchRespon
 		return nil, err
 	}
 	fmt.Printf("order: %+v\n", order)
+	l.ctx = context.WithValue(l.ctx, interceptor.CtxKeyAdminID, "33")
 	user, err := l.svcCtx.UserRpc.GetUser(l.ctx, &userclient.GetUserRequest{UserID: int64(order.UserId)})
 	if err != nil {
 		return nil, err

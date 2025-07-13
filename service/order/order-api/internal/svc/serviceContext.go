@@ -2,6 +2,7 @@ package svc
 
 import (
 	"order-api/internal/config"
+	"order-api/internal/interceptor"
 	"order/model"
 	"user/rpc/userclient"
 
@@ -18,8 +19,13 @@ type ServiceContext struct {
 func NewServiceContext(c config.Config) *ServiceContext {
 	conn := sqlx.NewMysql(c.MySql.DataSource)
 	return &ServiceContext{
-		Config:    c,
-		UserRpc:   userclient.NewUser(zrpc.MustNewClient(c.UserRpc)),
+		Config: c,
+		UserRpc: userclient.NewUser(
+			zrpc.MustNewClient(
+				c.UserRpc,
+				zrpc.WithUnaryClientInterceptor(interceptor.HInterceptor),
+			),
+		),
 		UserModel: model.NewOrderModel(conn, c.CacheRedis),
 	}
 }
