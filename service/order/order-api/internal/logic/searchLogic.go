@@ -2,10 +2,10 @@ package logic
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"user/rpc/userclient"
 
+	"order-api/internal/errorx"
 	"order-api/internal/interceptor"
 	"order-api/internal/svc"
 	"order-api/internal/types"
@@ -31,7 +31,7 @@ func NewSearchLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SearchLogi
 func (l *SearchLogic) Search(req *types.SearchRequest) (resp *types.SearchResponse, err error) {
 	order, err := l.svcCtx.UserModel.FindOneByOrderId(l.ctx, req.OrderID)
 	if err == sqlx.ErrNotFound {
-		return nil, errors.New("order id not found")
+		return nil, errorx.NewCodeError(errorx.MySQLErrCode, "internal error")
 	}
 	if err != nil {
 		return nil, err
